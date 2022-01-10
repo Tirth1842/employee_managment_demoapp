@@ -3,6 +3,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const db = require('../models/User');
+const passport = require('passport');
 
 //Register page
 router.get('/Register', (req,res) => res.render('register'));
@@ -46,7 +47,6 @@ router.post('/register',(req,res) => {
         db.query(queryCheck)
             .then((result) => {
                 if(result.rowCount>0) {
-                    console.log(result);
                     errors.push({msg: 'Email is already registered'})
                     res.render('register', {
                         errors,
@@ -87,40 +87,55 @@ router.post('/register',(req,res) => {
 router.get('/login',(req,res)=>res.render('login'));
 
 // Login User
-router.post('/login',(req,res) => {
-    const{  email, password } = req.body;
+// router.post('/login',(req,res) => {
+//     const{  email, password } = req.body;
     
-    if(!email || !password){
-        req.flash('error_msg','Please fill the details');
-        res.render('login');
-    }
-    else{
-        db.query('SELECT  email, password FROM public."Users" WHERE email=$1', [email])
-        .then((result) => {
+//     if(!email || !password){
+//         req.flash('error_msg','Please fill the details');
+//         res.render('login');
+//     }
+//     else{
+//         //match user
+//         db.query('SELECT  email, password FROM public."Users" WHERE email=$1', [email])
+//         .then((result) => {
             
-            if(result.rowCount==0){
-                console.log('hello');
-                req.flash('error_msg1', 'User not registered')
-                res.render('login');
-            }else{
-                // match the password
-                bcrypt.compare(password, result.rows[0].password, (err,isMatch) => {
-                    if(err) throw err;
+//             if(result.rowCount==0){
+//                 console.log('hello');
+//                 req.flash('error_msg1', 'User not registered')
+//                 res.render('login');
+//             }else{
+//                 // match the password
+//                 bcrypt.compare(password, result.rows[0].password, (err,isMatch) => {
+//                     if(err) throw err;
 
-                    if(isMatch) {
-                        return res.redirect('/dashboard');
-                    } else {
-                        req.flash('error_msg', 'Password incorrect');
-                        res.redirect('/users/login');
-                    }
-            });
-            }
+//                     if(isMatch) {
+//                         return res.redirect('/dashboard');
+//                     } else {
+//                         req.flash('error_msg', 'Password incorrect');
+//                         res.redirect('/users/login');
+//                     }
+//             });
+//             }
             
-        })
-        .catch(err => console.log(err));
-    }
+//         })
+//         .catch(err => console.log(err));
+//     }
 
     
 
+// })
+router.post('/login',(req,res,next) => {
+    passport.authenticate('local', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/users/login',
+        failureFlash: true // automatically generates the error.
+    })(req,res,next);
+})
+
+// logout user.
+router.get('/logout' ,(req,res) => {
+    req.logout();
+    req.flash('success_msg', 'You are logged out');
+    res.redirect('/users/login');
 })
 module.exports = router;
