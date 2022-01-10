@@ -3,7 +3,7 @@ const expressLayouts = require('express-ejs-layouts');
 const app = express();
 const flash = require('connect-flash');
 const session = require('express-session');
-
+const passport = require('passport');
 
 const index_routes = require('./routes/index');
 const users_routes = require('./routes/users');
@@ -20,6 +20,10 @@ app.use(session({
     resave: true,
     saveUninitialized: true
   }))
+
+  // passport middleware
+  app.use(passport.initialize());
+  app.use(passport.session());
 
 //connect flash
 app.use(flash());
