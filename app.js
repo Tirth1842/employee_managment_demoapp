@@ -7,6 +7,7 @@ const passport = require('passport');
 
 const index_routes = require('./routes/index');
 const users_routes = require('./routes/users');
+const dashboard_routes = require('./routes/dashboard');
 
 // Passport config
 require('./config/passport')(passport);
@@ -43,6 +44,7 @@ app.use((req,res,next) => {
 //routes
 app.use('/', index_routes);
 app.use('/users',users_routes);
+app.use('/dashboard',dashboard_routes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, console.log(`server started on port ${PORT} `));
