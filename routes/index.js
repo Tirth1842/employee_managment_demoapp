@@ -9,10 +9,9 @@ router.get('/', (req,res) => res.render('welcome'));
 // Dashboard
 
 router.get('/dashboard/',ensureAuthenticated,(req,res) => {
-    db.query('SELECT email, user_name, id FROM public."Users"')
+    db.query('SELECT first_name, last_name,email,id FROM public.employe_details')
         .then((result) => {
             res.render('dashboard', {
-                name: req.user.rows[0].user_name,
                 details: result.rows
             })
         })

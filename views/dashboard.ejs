@@ -10,8 +10,9 @@
         <thead>
           <tr class="table-info">
             <th scope="col">ID</th>
-            <th scope="col">Employee_Name</th>
-            <th scope="col">email</th>
+            <th scope="col">Employee_FiratName</th>
+            <th scope="col">Employee_LastName</th>
+            <th scope="col">Email</th>
             <th scope="col"></th>
             <th scope="col"></th>
           </tr>
@@ -22,10 +23,11 @@
                  
                 <tr class="table-light">
                     <td><%= count %> </td>
-                    <td><%= details.user_name %> </td>
+                    <td><%= details.first_name %> </td>
+                    <td><%= details.last_name %> </td>
                     <td><%= details.email %> </td>
                     <td><a class="btn btn-primary" href="/dashboard/<%= details.id %> ">Edit</a></td>
-                    <td><a id="delete" class="btn btn-primary" data-doc="<%= details.email %> ">Delete</a></td>
+                    <td><a id="delete" class="btn btn-primary" data-doc="<%= details.id %> ">Delete</a></td>
                   </tr>
                 <% count++ %>   
             <% }) %> 
@@ -50,7 +52,6 @@
 
         trashcan.addEventListener('click', (e) => {
             const endpoint = `/dashboard/${trashcan.dataset.doc}`;
-          alert(endpoint);
             // we need to use this because we want the delete request to be send once the delete button has been clicked 
             // so for that we need to use the frontend javascript 
             // and for that fetch is to used.
