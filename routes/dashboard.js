@@ -31,10 +31,9 @@ router.post('/:id', (req,res) => {
         .catch(err => console.log(err));
 })
 
-router.delete('/:id', (req,res) => {
-    const id = req.params.id;
-
-    db.query('DELETE FROM public."Users" WHERE id = $1',[id])
+router.delete('/:email', (req,res) => {
+    const email = req.params.email;
+    db.query('DELETE FROM public."Users" WHERE email = $1',[email])
         .then(() =>{
             res.json({ redirect: '/dashboard'})
         })

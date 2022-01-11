@@ -13,6 +13,7 @@
             <th scope="col">Employee_Name</th>
             <th scope="col">email</th>
             <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
@@ -24,6 +25,7 @@
                     <td><%= details.user_name %> </td>
                     <td><%= details.email %> </td>
                     <td><a class="btn btn-primary" href="/dashboard/<%= details.id %> ">Edit</a></td>
+                    <td><a id="delete" class="btn btn-primary" data-doc="<%= details.email %> ">Delete</a></td>
                   </tr>
                 <% count++ %>   
             <% }) %> 
@@ -32,3 +34,36 @@
         </tbody>
       </table>
 </div>
+
+<script>
+    $(document).ready(function(){
+      $('#delete').click(function() {
+        $(this).parent().parent().remove()
+        
+        
+        
+        })
+  
+      })
+      const trashcan = document.querySelector('#delete');
+    
+
+        trashcan.addEventListener('click', (e) => {
+            const endpoint = `/dashboard/${trashcan.dataset.doc}`;
+          alert(endpoint);
+            // we need to use this because we want the delete request to be send once the delete button has been clicked 
+            // so for that we need to use the frontend javascript 
+            // and for that fetch is to used.
+            fetch(endpoint, {
+                method: 'DELETE'
+            })
+            .then((response) => response.json()) // convertion of json data to actual javascript object
+            .then((data) => console.log('success'))
+            .catch(err => console.log(err));
+        })
+    
+
+    
+
+    
+</script>
