@@ -1,46 +1,48 @@
 const express = require('express');
-const { ensureAuthenticated } = require('../config/auth')
+const { ensureAuthenticated } = require('../config/auth');
 const router = express.Router();
-
+const dashController = require('../controller/dashController');
 const db = require('../models/User');
-
-router.get('/:id', (req,res) => {
-    const id = req.params.id;
-    db.query('SELECT first_name,last_name,email,id FROM public.employe_details WHERE id = $1',[id])
-        .then((result) => {
-            res.render('edit',{details: result.rows[0] })
-        })
-
+// add employee page
+router.get('/add',(req,res) => {
+    res.render('add')
 })
 
-router.post('/:id', (req,res) => {
-    const {first_name,last_name,email} = req.body;
-    console.log(req.body);
-    const id = req.params.id;
-    console.log(id);
-    db.query('UPDATE public.employe_details SET first_name = $1, last_name = $2, email = $3 WHERE id = $4',[first_name,last_name,email,id])
-        .then(() => {
-            db.query('SELECT first_name, last_name, email FROM public.employe_details')
-            .then((result) => {
-                res.render('dashboard', {
-                    details: result.rows
-                })
+// add employee 
+router.post('/add',(req,res) => {
+    const {first_name, last_name, email} = req.body;
+    let errors = [];
+    
+    if(!first_name || !last_name || !email){
+        errors.push({ msg: 'Please fill in all fields'});
+        console.log('hello');
+    }
+    if(errors.length>0){
+        res.render('add',{
+            errors,
+            first_name,
+            last_name,
+            email
+        });
+    }else {
+        db.query('INSERT INTO public.employe_details(first_name, last_name, email) VALUES ($1,$2,$3)',[first_name,last_name,email])
+            .then(() => {
+                res.redirect('/dashboard');
             })
             .catch(err => console.log(err));
-       
-           
-        })
-        .catch(err => console.log(err));
-})
+    }
 
-router.delete('/:id', (req,res) => {
-    const id = req.params.id;
-    db.query('DELETE FROM public.employe_details WHERE id = $1',[id])
-        .then(() =>{
-            res.json({ redirect: '/dashboard'})
-        })
-        .catch(err => console.log(err));
 })
+// edit form render page
+router.get('/:id', dashController.edit_form_page);
+
+// editing the employee details
+router.post('/:id',dashController.edit_employee_details);
+
+// deleting the employe record
+router.delete('/:id',dashController.employe_delete);
+
+
 
 
 module.exports = router;

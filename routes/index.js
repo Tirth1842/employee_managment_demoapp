@@ -8,14 +8,17 @@ router.get('/', (req,res) => res.render('welcome'));
 
 // Dashboard
 
-router.get('/dashboard/',ensureAuthenticated,(req,res) => {
-    db.query('SELECT first_name, last_name,email,id FROM public.employe_details')
+router.get('/dashboard/',(req,res) => {
+    if(req.session.login = true){
+        db.query('SELECT first_name, last_name,email,id FROM public.employe_details ORDER BY id')
         .then((result) => {
             res.render('dashboard', {
                 details: result.rows
             })
         })
         .catch(err => console.log(err));
+   
+    }
    
     });
 

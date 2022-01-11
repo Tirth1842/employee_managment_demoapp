@@ -3,7 +3,7 @@
       <div class="card card-body">
        
          <%- include('./partials/messages')  %>  
-        <form action="/dashboard/<%= details.id %> " method="POST">
+        <form action="/dashboard/add " method="POST">
           <div class="form-group">
             <label for="name">First_Name</label>
             <input
@@ -12,7 +12,7 @@
               name="first_name"
               class="form-control"
               placeholder="Enter Name"
-              value="<%= details.first_name %>"
+              value="<%= typeof first_name != 'undefined' ? first_name : '' %>"
             />
           </div>
           <div class="form-group">
@@ -23,7 +23,7 @@
                 name="last_name"
                 class="form-control"
                 placeholder="Enter Name"
-                value="<%= details.last_name %>"
+                value="<%= typeof last_name != 'undefined' ? last_name : '' %>"
               />
           </div>
           
@@ -35,46 +35,18 @@
               name="email"
               class="form-control"
               placeholder="Enter Email"
-              value="<%= details.email %>"
+              value="<%= typeof email != 'undefined' ? email : '' %>"
             />
           </div>
          
           
           <button type="submit" class="btn btn-primary btn-block">
-            Edit
+            Add
           </button>
-          <a  class=" btns btn btn-primary btn-block"  data-doc="<%= details.id %> ">
-            Delete
-          </a>
          
         </form>
       </div>
     </div>
   </div>
-  <script>
-    $('.btns').click(function() {
-       
-        
-       const trashcan = document.querySelector('.btns');
-       
-           const endpoint = `/dashboard/${trashcan.dataset.doc}`;
-           alert(endpoint);
-           // we need to use this because we want the delete request to be send once the delete button has been clicked 
-           // so for that we need to use the frontend javascript 
-           // and for that fetch is to used.
-           fetch(endpoint, {
-               method: 'DELETE'
-           })
-           .then((response) => response.json()) // convertion of json data to actual javascript object
-           .then((data) =>  window.location.href = data.redirect)
-           .catch(err => console.log(err));
-     
-      
-       })
-
-     
-   
-
-  </script>
 
   

@@ -8,6 +8,7 @@ const passport = require('passport');
 const index_routes = require('./routes/index');
 const users_routes = require('./routes/users');
 const dashboard_routes = require('./routes/dashboard');
+const req = require('express/lib/request');
 
 // Passport config
 require('./config/passport')(passport);
@@ -21,8 +22,8 @@ app.use(express.urlencoded({ extended: false}));
 // Express Session
 app.use(session({
     secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false
   }))
 
   // passport middleware

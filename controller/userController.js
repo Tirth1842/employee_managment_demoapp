@@ -1,19 +1,54 @@
 const db = require('../models/User');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
-
 // login page
 const login_render = (req,res) => {
     res.render('login');
 }
 
-//login user
-const login_user =(req,res,next) => {
-    passport.authenticate('local', {
-        successRedirect: '/dashboard',
-        failureRedirect: '/users/login',
-        failureFlash: true // automatically generates the error.
-    })(req,res,next);
+// //login user
+// const login_user =(req,res,next) => {
+//     passport.authenticate('local', {
+//         successRedirect: '/dashboard',
+//         failureRedirect: '/users/login',
+//         failureFlash: true // automatically generates the error.
+//     })(req,res,next);
+// }
+
+const login_user = (req,res) => {
+    const{  email, password } = req.body;
+    
+    
+    if(!email || !password){
+        req.flash('error_msg','Please fill the details');
+        res.render('login');
+    }
+    else{
+        //match user
+        db.query('SELECT  email, password FROM public."Users" WHERE email=$1', [email])
+        .then((result) => {
+            
+            if(result.rowCount==0){
+                console.log('hello');
+                req.flash('error_msg1', 'User not registered')
+                res.render('login');
+            }else{
+                // match the password
+                bcrypt.compare(password, result.rows[0].password, (err,isMatch) => {
+                    if(err) throw err;
+
+                    if(isMatch) {
+                        return res.redirect('/dashboard');
+                    } else {
+                        req.flash('error_msg', 'Password incorrect');
+                        res.redirect('/users/login');
+                    }
+            });
+            }
+            
+        })
+        .catch(err => console.log(err));
+    }
 }
 
 // register page
@@ -98,6 +133,7 @@ const register_user = (req,res) => {
 
 // logout user
 const logout_user = (req,res) => {
+    req.session.login = false;
     req.logout();
     req.flash('success_msg', 'You are logged out');
     res.redirect('/users/login');
