@@ -12,6 +12,7 @@
               name="first_name"
               class="form-control"
               placeholder="Enter Name"
+              required="required"
               value="<%= typeof first_name != 'undefined' ? first_name : '' %>"
             />
           </div>
@@ -23,6 +24,7 @@
                 name="last_name"
                 class="form-control"
                 placeholder="Enter Name"
+                required="required"
                 value="<%= typeof last_name != 'undefined' ? last_name : '' %>"
               />
           </div>
@@ -33,9 +35,11 @@
               type="email"
               id="email"
               name="email"
+              type="email"
               class="form-control"
               placeholder="Enter Email"
-              value="<%= typeof email != 'undefined' ? email : '' %>"
+              required="required"
+              value="<%= typeof email != 'undefined' ? email   : '' %>"
             />
           </div>
          

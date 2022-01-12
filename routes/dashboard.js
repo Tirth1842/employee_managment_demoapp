@@ -3,36 +3,13 @@ const { ensureAuthenticated } = require('../config/auth');
 const router = express.Router();
 const dashController = require('../controller/dashController');
 const db = require('../models/User');
+
+
 // add employee page
-router.get('/add',(req,res) => {
-    res.render('add')
-})
+router.get('/add',dashController.add_page);
 
 // add employee 
-router.post('/add',(req,res) => {
-    const {first_name, last_name, email} = req.body;
-    let errors = [];
-    
-    if(!first_name || !last_name || !email){
-        errors.push({ msg: 'Please fill in all fields'});
-        console.log('hello');
-    }
-    if(errors.length>0){
-        res.render('add',{
-            errors,
-            first_name,
-            last_name,
-            email
-        });
-    }else {
-        db.query('INSERT INTO public.employe_details(first_name, last_name, email) VALUES ($1,$2,$3)',[first_name,last_name,email])
-            .then(() => {
-                res.redirect('/dashboard');
-            })
-            .catch(err => console.log(err));
-    }
-
-})
+router.post('/add',dashController.add_employee)
 // edit form render page
 router.get('/:id', dashController.edit_form_page);
 
