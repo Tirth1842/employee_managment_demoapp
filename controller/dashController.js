@@ -29,6 +29,7 @@ const edit_form_page = (req,res) =>{
 // editing the employee details
 const edit_employee_details = (req,res) => {
     const {first_name,last_name,email} = req.body;
+    console.log(req.body);
     const id = req.params.id;
 
     

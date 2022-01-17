@@ -36,6 +36,7 @@
               name="password"
               class="form-control"
               placeholder="Create Password"
+              pattern=".{6,}" title="minimum 6 character"
               value="<%= typeof password != 'undefined' ? password : '' %>"
             />
           </div>

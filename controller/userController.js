@@ -58,6 +58,7 @@ const register_render = (req,res) => {
 
 // register user
 const register_user = (req,res) => {
+    console.log(req.body);
     const{ name, email, password, password2 } = req.body; // getting ans assigning the details from body of url
     let errors= [];
 
@@ -73,9 +74,9 @@ const register_user = (req,res) => {
     }
 
     //check pass length
-    if(password.length<6){
-        errors.push({ msg: 'Password must be atleast 6 character'});
-    }
+    // if(password.length<6){
+    //     errors.push({ msg: 'Password must be atleast 6 character'});
+    // }
     
     if(errors.length>0){
         res.render('register',{
@@ -119,7 +120,7 @@ const register_user = (req,res) => {
                                   };
                                 db.query(queryConfig)
                                 .then((user)=>{req.flash('success_msg', 'You are now registered and can log in');
-                                        res.redirect('/users/login');})
+                                        res.status(200).redirect('/users/login');})
                                 .catch((err) => console.log(err));
                                 }))
                             
