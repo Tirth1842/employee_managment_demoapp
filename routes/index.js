@@ -1,10 +1,9 @@
 const express = require('express');
-const req = require('express/lib/request');
 const router = express.Router();
-const { ensureAuthenticated } = require('../config/auth')
+// const { ensureAuthenticated } = require('../config/auth')
 const db = require('../models/User');
 //Welcome Page
-router.get('/', (req,res) => res.status(200).render('welcome'));
+// router.get('/', (req,res) => res.status(200).render('welcome'));
 
 // Dashboard
 

@@ -2,9 +2,9 @@ const db = require('../models/User');
 var validator = require("email-validator");
 
 // displaying the add employee page
-const add_page = (req,res) => {
-    res.render('add')
-}
+// const add_page = (req,res) => {
+//     res.render('add')
+// }
 
 // add employee
 const add_employee = (req,res) => {
@@ -77,6 +77,5 @@ module.exports = {
     edit_form_page,
     edit_employee_details,
     employe_delete,
-    add_page,
     add_employee
 }

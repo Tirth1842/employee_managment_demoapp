@@ -6,7 +6,7 @@ const db = require('../models/User');
 
 
 // add employee page
-router.get('/add',dashController.add_page);
+// router.get('/add',dashController.add_page);
 
 // add employee 
 router.post('/add',dashController.add_employee)
