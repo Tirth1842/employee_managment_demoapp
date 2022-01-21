@@ -1,4 +1,5 @@
 const db = require('../models/User');
+var validator = require("email-validator");
 
 // displaying the add employee page
 const add_page = (req,res) => {
@@ -9,19 +10,29 @@ const add_page = (req,res) => {
 const add_employee = (req,res) => {
     const {first_name, last_name, email} = req.body;
     
-    
-        db.query('INSERT INTO public.employe_details(first_name, last_name, email) VALUES ($1,$2,$3)',[first_name,last_name,email])
+        if(!first_name || !last_name ||! email) {
+            res.json({'err':'please fill the field'})
+        }else if(first_name.length < 4 || last_name.length < 4){
+            res.json({'err':'Required minimum character 4'})
+        }else if(!validator.validate(email)){
+            res.json({'err':'Please enter valid email'})
+        }
+        else{
+            db.query('INSERT INTO public.employe_details(first_name, last_name, email) VALUES ($1,$2,$3)',[first_name,last_name,email])
             .then(() => {
-                res.redirect('/dashboard');
+                res.json({'message':'employee added successfully'});
             })
             .catch(err => console.log(err));
+        }
+    
+       
 }
 // edit form render
 const edit_form_page = (req,res) =>{
     const id = req.params.id;
     db.query('SELECT first_name,last_name,email,id FROM public.employe_details WHERE id = $1',[id])
         .then((result) => {
-            res.render('edit',{details: result.rows[0] })
+            res.json(result.rows[0])
         })
 
 }
@@ -29,16 +40,27 @@ const edit_form_page = (req,res) =>{
 // editing the employee details
 const edit_employee_details = (req,res) => {
     const {first_name,last_name,email} = req.body;
-    console.log(req.body);
+   
     const id = req.params.id;
 
-    
-    db.query('UPDATE public.employe_details SET first_name = $1, last_name = $2, email = $3 WHERE id = $4',[first_name,last_name,email,id])
+    if(!first_name || !last_name || !email) {
+        res.json({'err': 'Please fill the detail'})
+    } else if (first_name.length < 4 || last_name.length < 4) {
+        res.json({'err': 'Required Minimum character 4'})
+    } else if(!validator.validate(email)){
+        res.json({'err':'Please enter valid email'})
+    }
+    else{
+        db.query('UPDATE public.employe_details SET first_name = $1, last_name = $2, email = $3 WHERE id = $4',[first_name,last_name,email,id])
         .then(() => {
-            res.redirect('/dashboard');
+            res.json({'msg':'edited successfully'});
            
         })
         .catch(err => console.log(err));
+    }
+
+    
+   
 }
 
 
@@ -47,7 +69,7 @@ const employe_delete = (req,res) => {
     const id = req.params.id;
     db.query('DELETE FROM public.employe_details WHERE id = $1',[id])
         .then(() =>{
-            res.json({ redirect: '/dashboard'})
+            res.json({'msg':'deleted successfully'})
         })
         .catch(err => console.log(err));
 }

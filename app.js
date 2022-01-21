@@ -4,6 +4,7 @@ const app = express();
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
+const cors=require("cors");
 
 const index_routes = require('./routes/index');
 const users_routes = require('./routes/users');
@@ -17,8 +18,15 @@ app.use(expressLayouts);
 app.set('view engine','ejs');
 
 //body parser
-app.use(express.urlencoded({ extended: false}));
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json())
+const corsOptions ={
+  origin:'*', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200,
+}
 
+app.use(cors(corsOptions))
 // Express Session
 app.use(session({
     secret: 'keyboard cat',
